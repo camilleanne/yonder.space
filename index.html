@@ -1,19 +1,18 @@
 <!doctype html>
 
-<html lang="en">
+<html lang='en'>
 <head>
-  <meta charset="utf-8">
-
+  <meta charset='utf-8'>
   <title>yonder.space</title>
-  <meta name="description" content="yonder.space">
-  <style type="text/css">
+  <meta name='description' content='yonder.space'>
+
+  <style type='text/css'>
       body {
       background-color: black;
        width:100%; 
        height:100%;
        overflow-y: hidden;
        font-family: Sans-Serif;
-       font-size: 10px;
        color: white;
       }
       #wrapper {
@@ -22,8 +21,8 @@
         left: 50%;
         width: 300px;
         height: 500px;
-        margin-top: -250px; /* Half the height */
-        margin-left: -150px; /* Half the width */
+        margin-top: -250px;
+        margin-left: -150px;
       }
       #janeway {
         width: 300px;
@@ -36,7 +35,7 @@
         left: 0;
       }
       #front {
-        z-index: 100;
+        z-index: 10;
 
       }
       #back {
@@ -44,8 +43,10 @@
       }
       #yourwelcome {
         position: absolute;
-        bottom: 0;
+        bottom: 10px;
         right: 10px;
+        z-index: 11;
+        font-size: 0.8em;
       }
   </style>
 </head>
@@ -54,7 +55,7 @@
   <div id='wrapper'>
     <img id='janeway' src='./janeway.png'></img>
   </div>
-  <div id='yourwelcome'>you are very welcome 💛 <a href='http://github.com/camilleanne'>camille</a></div>
+  <div id='yourwelcome'>you are very welcome 💛 <a href='http://github.com/camilleanne' target='_blank'>camille</a></div>
   <canvas class='canvas' id='front'></canvas>
   <canvas class='canvas' id='back'></canvas>
 
@@ -125,8 +126,10 @@
         update(order);
       }
       
-      //Function to move the snowflakes
-      //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
+      // Function to move the snowflakes
+      // angle will be an ongoing incremental flag.
+      // Sin and Cos functions will be applied to it
+      // to create vertical and horizontal movements of the flakes
       var angle = 0;
       function update(order) {
         angle += 0.01;
