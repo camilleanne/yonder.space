@@ -86,12 +86,12 @@
       //animation loop
       img.onload = function(){
         setInterval(function() {draw(ctxF, 'front')}, 33);
-        setInterval(function() {draw(ctxB, 'back')}, 33);
+        setInterval(function() {draw(ctxB, 'back')}, 40);
       }
       img.src = url;
       
       //snowflake particles
-      var mp = 20; //max particles
+      var mp = 30; //max particles
       var particles = {
         back: [],
         front: []
@@ -100,14 +100,14 @@
         particles.back.push({
           x: Math.random()*W, //x-coordinate
           y: Math.random()*H, //y-coordinate
-          r: Math.random()*40+1, //radius
+          r: (Math.random()*20)+1, //radius
           d: Math.random()*mp, //density
           dx: Math.random() //degrees
         });
         particles.front.push({
           x: Math.random()*W,
           y: Math.random()*H,
-          r: Math.random()*40+1,
+          r: (Math.random()*60)+1,
           d: Math.random()*mp,
           dx: Math.random() // degrees
         })
