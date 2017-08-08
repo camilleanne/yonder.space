@@ -1,0 +1,127 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>yonder.space</title>
+  <meta name="description" content="yonder.space">
+  <style type="text/css">
+      body {
+      background-color: white;
+       width:100%; 
+       height:100%;
+      }
+      #image {
+        overflow:hidden;
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 100%;
+        height: auto;
+        margin-top: -250px; /* Half the height */
+        margin-left: -250px; /* Half the width */
+      }
+      #janeway {
+        width: 450px;
+      }
+      #canvas {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 100;
+      }
+  </style>
+</head>
+
+<body>
+  <div id='image'><img id='janeway' src='./janeway.jpg'></img></div>
+  <canvas id="canvas"></canvas>
+  <script>
+
+
+    window.onload = function(){
+
+    var data = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" enable-background="new 0 0 64 64"><path d="m22 0c0 16.9-9.1 32-22 32 12.9 0 22 15.1 22 32 0-16.9 9.1-32 22-32-12.9 0-22-15.1-22-32" fill="#ffe54d"/><path d="m53 0c0 8.4-4.6 16-11 16 6.4 0 11 7.6 11 16 0-8.4 4.6-16 11-16-6.4 0-11-7.6-11-16" fill="#6adbc6"/><path d="m48 32c0 8.4-4.6 16-11 16 6.4 0 11 7.6 11 16 0-8.4 4.6-16 11-16-6.4 0-11-7.6-11-16" fill="#ff73c0"/></svg>';
+    
+    var DOMURL = window.URL || window.webkitURL || window;
+    var svg = new Blob([data], {type: 'image/svg+xml'});
+    var url = DOMURL.createObjectURL(svg);
+    var img = new Image();
+    //animation loop
+    img.onload = function(){
+      setInterval(draw, 33);
+    }
+    img.src = url;
+      //canvas init
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      
+      //canvas dimensions
+      var W = window.innerWidth;
+      var H = window.innerHeight;
+      canvas.width = W;
+      canvas.height = H;
+      
+      //snowflake particles
+      var mp = 30; //max particles
+      var particles = [];
+      for(var i = 0; i < mp; i++) {
+        particles.push({
+          x: Math.random()*W, //x-coordinate
+          y: Math.random()*H, //y-coordinate
+          r: Math.random()*40+1, //radius
+          d: Math.random()*mp //density
+        })
+      }
+      
+      //Lets draw the flakes
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        // var img = new Image();
+        // img.onload = function() {
+          for(var i = 0; i < mp; i++) {
+            var p = particles[i];
+            if (p.x === -5) continue;
+            ctx.drawImage(img, p.x, p.y, p.r, p.r);
+          }
+        // }
+        update();
+      }
+      
+      //Function to move the snowflakes
+      //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
+      var angle = 0;
+      function update() {
+        angle += 0.01;
+        for(var i = 0; i < mp; i++) {
+          var p = particles[i];
+          //Updating X and Y coordinates
+          //We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
+          //Every particle has its own density which can be used to make the downward movement different for each flake
+          //Lets make it more random by adding in the radius
+          p.y += (Math.cos(angle+p.d) + 1 + p.r/2)/2;
+          p.x += (Math.sin(angle) * 2)/2;
+
+          //Sending flakes back from the top when it exits
+          //Lets make it a bit more organic and let flakes enter from the left and right also.
+          if(p.x > W || p.x < 0 || p.y > H) {
+            if(i%3 > 0) {
+              particles[i] = {x: Math.random()*W, y: -10, r: p.r, d: p.d};
+            } else {
+              //If the flake is exiting from the right
+              if(Math.sin(angle) > 0) {
+                particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
+              } else {
+                particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
+              }
+            }
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
